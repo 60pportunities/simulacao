@@ -6,6 +6,7 @@ jobs:
   ci:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - name: checkout
+      uses: actions/checkout@v4
     - name: Teste Unitário
       run: script/test
