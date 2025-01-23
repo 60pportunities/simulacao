@@ -1,0 +1,21 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: ValidaTesteUnitário
+      run: script/test
+
+    - name: DeployQualidade
+      env:
+        DEPLOY_STAGE: qualidade
+        DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
+      run: script/deploy
