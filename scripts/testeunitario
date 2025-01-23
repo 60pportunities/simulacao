@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Início  da execução do processode Teste Unitário";
+exit_code=${EXIT_CODE:-0}
+echo "Término da execução do processo de Teste Unitário";
+echo "Teste com a saída: ${exit_code}"
+
+exit ${exit_code}
