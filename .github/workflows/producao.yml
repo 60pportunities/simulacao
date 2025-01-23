@@ -1,0 +1,49 @@
+name: Qualidade to Production
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: checkOuyt
+      uses: actions/checkout@v4
+      
+    - name: TesteUnitario
+      run: script/testeunitario
+
+    - name: Set up GitHub token
+      run: |
+        echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+
+    - name: Configurar Git
+      run: |
+        git config --global user.name "HVasconcellos"
+        git config --global user.email "horacio.vasconcellos@gmail.com"
+
+    - name: Get latest tag
+      id: get_tag
+      run: |
+          LAST_TAG=$(git tag -l --sort=v:refname | head -n 1)
+          echo "Última tag: $LAST_TAG"
+          echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
+
+    - name: Create Changelog
+      uses: saadmk11/changelog-ci@v1.1.2
+      id: changelog_ci
+      with:
+        changelog_filename: CHANGELOG.md
+        release_version: ${{ env.LAST_TAG }}
+        committer_username: 'HVasconcellos'
+        committer_email: 'horacio.vasconcellos@gmail.com'
+        config_file: .github/changelogConfig.yml
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Producao
+      env:
+        DEPLOY_STAGE: main
+        DEPLOY_KEY: ${{ secrets.PRODUCTION_DEPLOY_KEY }}
+      run: scripts/testeunitario

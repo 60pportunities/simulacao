@@ -9,4 +9,4 @@ jobs:
     - name: checkout
       uses: actions/checkout@v4
     - name: Teste Unitário
-      run: script/test
+      run: scripts/testeunitario

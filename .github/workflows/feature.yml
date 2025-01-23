@@ -17,4 +17,4 @@ jobs:
       env:
         DEPLOY_STAGE: qualidade
         DEPLOY_KEY: ${{ secrets.STAGING_DEPLOY_KEY }}
-      run: script/deploy
+      run: scripts/testeunitario
